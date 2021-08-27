@@ -94,9 +94,9 @@ module.exports = {
 
   registerPoint: async (req, res) => {
     try{
-      const { date, type, collaboratorId } = req.body;
+      const { hours, type, collaboratorId } = req.body;
       
-      if( !type || !collaboratorId) return res.json({
+      if( !hours || !type || !collaboratorId) return res.json({
         success: false,
         error: 'Parâmetros inválidos'
       });
@@ -104,6 +104,7 @@ module.exports = {
       const collaborator = await Collaborators.findByIdAndUpdate(collaboratorId, {
         $push: {
           points: {
+            hours,
             type
           }
         }
