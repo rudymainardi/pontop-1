@@ -6,6 +6,9 @@ const AuthController = require('./controllers/AuthController.js');
 const authMiddleware = require('./middlewares/auth.js');
 
 /* Collaborators routes */
+routes.get('/', (req, res) => {
+ return res.send('!'); 
+});
 routes.get('/collaborators', authMiddleware, CollaboratorsController.read); // Get all the collaborators
 routes.get('/collaborators/:id', authMiddleware, CollaboratorsController.read); // Get a specific collaborator
 routes.post('/collaborators', authMiddleware, CollaboratorsController.create); // Create a new collaborator
