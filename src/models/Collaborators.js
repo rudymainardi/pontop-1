@@ -9,6 +9,27 @@ const CollaboratorsSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  
+  points: {
+    type: [
+      {
+        type: {
+          type: String,
+          required: true
+        },
+        hours: {
+          type: String,
+          required: true
+        },
+        date: {
+          type: Date,
+          default: Date.now(),
+          required: true
+        },
+      }
+    ],
+    default: []
+  },
 
   cpf: {
     type: String,
