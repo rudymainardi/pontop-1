@@ -90,5 +90,35 @@ module.exports = {
         });
     };
 
-  }
+  },
+
+  registerPoint: async (req, res) => {
+    try{
+      const { date, type, collaboratorId } = req.body;
+      
+      if( !type || !collaboratorId) return res.json({
+        success: false,
+        error: 'Parâmetros inválidos'
+      });
+
+      const collaborator = await Collaborators.findByIdAndUpdate(collaboratorId, {
+        $push: {
+          points: {
+            type
+          }
+        }
+      }, { new: true });
+
+      return res.json({
+        success: true,
+        collaborator
+      });
+    } catch(err){
+        return res.json({
+            success: false,
+            error: err
+        });
+    };
+
+  },
 };

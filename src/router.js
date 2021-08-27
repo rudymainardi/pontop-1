@@ -11,6 +11,7 @@ routes.get('/collaborators/:id', authMiddleware, CollaboratorsController.read); 
 routes.post('/collaborators', authMiddleware, CollaboratorsController.create); // Create a new collaborator
 routes.put('/collaborators/:id', authMiddleware, CollaboratorsController.update); // Update a collaborator
 routes.delete('/collaborators/:id', authMiddleware, CollaboratorsController.delete); // Delete a collaborator
+routes.post('/collaborators/points', authMiddleware, CollaboratorsController.registerPoint); // Add points to a collaborator
 
 /* Auth routes */
 routes.post('/auth', AuthController.authenticate); // Authenticate a collaborator
