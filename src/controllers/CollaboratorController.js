@@ -94,9 +94,9 @@ module.exports = {
 
   registerPoint: async (req, res) => {
     try{
-      const { hours, type, collaboratorId } = req.body;
+      const { date, hours, type, collaboratorId } = req.body;
       
-      if( !hours || !type || !collaboratorId) return res.json({
+      if( !date || !hours || !type || !collaboratorId) return res.json({
         success: false,
         error: 'Parâmetros inválidos'
       });
