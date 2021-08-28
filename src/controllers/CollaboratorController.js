@@ -104,6 +104,7 @@ module.exports = {
       const collaborator = await Collaborators.findByIdAndUpdate(collaboratorId, {
         $push: {
           points: {
+            date,
             hours,
             type
           }
