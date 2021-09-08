@@ -2,6 +2,7 @@ const express = require('express');
 const routes = express.Router();
 
 const CollaboratorsController = require('./controllers/CollaboratorController.js');
+const CompaniesController = require('./controllers/CompaniesController');
 const AuthController = require('./controllers/AuthController.js');
 const authMiddleware = require('./middlewares/auth.js');
 
@@ -9,12 +10,19 @@ const authMiddleware = require('./middlewares/auth.js');
 routes.get('/', (req, res) => {
  return res.send('!'); 
 });
-routes.get('/collaborators', authMiddleware, CollaboratorsController.read); // Get all the collaborators
-routes.get('/collaborators/:id', authMiddleware, CollaboratorsController.read); // Get a specific collaborator
-routes.post('/collaborators', authMiddleware, CollaboratorsController.create); // Create a new collaborator
-routes.put('/collaborators/:id', authMiddleware, CollaboratorsController.update); // Update a collaborator
-routes.delete('/collaborators/:id', authMiddleware, CollaboratorsController.delete); // Delete a collaborator
-routes.post('/collaborators/points', authMiddleware, CollaboratorsController.registerPoint); // Add points to a collaborator
+routes.get('/collaborators', authMiddleware, CollaboratorsController.read);
+routes.get('/collaborators/:id', authMiddleware, CollaboratorsController.read);
+routes.post('/collaborators', authMiddleware, CollaboratorsController.create);
+routes.put('/collaborators/:id', authMiddleware, CollaboratorsController.update);
+routes.delete('/collaborators/:id', authMiddleware, CollaboratorsController.delete);
+routes.post('/collaborators/points', authMiddleware, CollaboratorsController.registerPoint);
+
+routes.get('/companies', authMiddleware, CompaniesController.read);
+routes.get('/companies/:id', authMiddleware, CompaniesController.read);
+routes.post('/companies', authMiddleware, CompaniesController.create);
+routes.put('/companies/:id', authMiddleware, CompaniesController.update);
+routes.delete('/companies/:id', authMiddleware, CompaniesController.delete);
+routes.post('/companies/points', authMiddleware, CompaniesController.registerPoint);
 
 /* Auth routes */
 routes.post('/auth', AuthController.authenticate); // Authenticate a collaborator
