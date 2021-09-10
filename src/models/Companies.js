@@ -22,7 +22,7 @@ const CompaniesSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  collaborator: {
+  collaborators: {
     type: Array,
     required: true,
   },
