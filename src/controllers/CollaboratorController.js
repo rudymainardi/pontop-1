@@ -128,4 +128,46 @@ module.exports = {
     };
 
   },
+
+  editPoint: async (req, res) => {
+    try{
+      const { id } = req.params;
+      const { pointId, date, hours, type } = req.body;
+
+      if( !date || !hours || !type || !id || !pointId) return res.json({
+        success: false,
+        error: 'Parâmetros inválidos'
+      });
+      // console.log(id)
+
+      // const collaborator = await Collaborators.findOne({_id: id});
+
+      // const point = collaborator.points.id(pointId);
+      // console.log(point);
+
+      const collaborator = await Collaborators.findByIdAndUpdate(id, {
+        $set: {
+          'points.$[i].date': date,
+          'points.$[i].hours': hours,
+          'points.$[i].type': type
+        }
+
+      }, {
+        arrayFilters: [{ 'i._id': pointId }],
+        new: true
+      });
+
+      return res.json({
+        success: true,
+        collaborator
+      });
+    } catch(err){
+      console.log(err)
+        return res.json({
+            success: false,
+            error: err
+        });
+    };
+
+  }
 };
