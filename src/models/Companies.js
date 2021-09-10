@@ -21,7 +21,11 @@ const CompaniesSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: true,
-  }
+  },
+  collaborator: {
+    type: Array,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Companies', CompaniesSchema);

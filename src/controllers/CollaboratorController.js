@@ -1,4 +1,5 @@
 const Collaborators = require('../models/Collaborators');
+const Companies = require('../models/Companies');
 
 module.exports = {
   read: async (req, res) => {
@@ -31,8 +32,11 @@ module.exports = {
 
   create: async (req, res) => {
     try{
-      if(req.body.password)
-        req.body.password = undefined;
+      if(req.body.company === 'none') return res.json({
+        success: false,
+        error: 'Company is required'
+      });
+      
       
       if(req.body.cpf && await Collaborators.findOne({ cpf: req.body.cpf })) return res.json({
         success: false,
@@ -40,6 +44,7 @@ module.exports = {
       });
       
       const collaborator = await Collaborators.create(req.body);
+      const company = await Collaborators.findByIdAndUpdate(req.body.company, { $push: { collaborators: collaborator._id } }, { new: true });
 
       return res.json({
         success: true,
