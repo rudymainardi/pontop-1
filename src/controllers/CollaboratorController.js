@@ -106,9 +106,12 @@ module.exports = {
         error: 'Parâmetros inválidos'
       });
 
+      const collaborator = await Collaborators.findOne({_id: id});
+
       const collaborator = await Collaborators.findByIdAndUpdate(collaboratorId, {
         $push: {
           points: {
+            collaboratorName: collaborator.name,
             date,
             hours,
             type
@@ -138,12 +141,6 @@ module.exports = {
         success: false,
         error: 'Parâmetros inválidos'
       });
-      // console.log(id)
-
-      // const collaborator = await Collaborators.findOne({_id: id});
-
-      // const point = collaborator.points.id(pointId);
-      // console.log(point);
 
       const collaborator = await Collaborators.findByIdAndUpdate(id, {
         $set: {
