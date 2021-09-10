@@ -64,6 +64,7 @@ module.exports = {
         const { id } = req.params;
 
         const collaborator = await Collaborators.findByIdAndUpdate(id, req.body, { new: true });
+        const company = await Companies.findByIdAndUpdate(collaborator.company, { $push: { collaborators: collaborator._id } }, { new: true });
 
         return res.json({
           success: true,
