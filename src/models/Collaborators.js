@@ -13,6 +13,10 @@ const CollaboratorsSchema = new mongoose.Schema({
   points: {
     type: [
       {
+        collaboratorName: {
+          type: String,
+          required: true
+        },
         type: {
           type: String,
           required: true
