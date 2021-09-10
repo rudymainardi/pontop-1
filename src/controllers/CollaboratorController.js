@@ -108,6 +108,7 @@ module.exports = {
 
   registerPoint: async (req, res) => {
     try{
+      const id = req.userId;
       const { date, hours, type, collaboratorId } = req.body;
       
       if( !date || !hours || !type || !collaboratorId) return res.json({
