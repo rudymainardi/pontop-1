@@ -63,8 +63,16 @@ module.exports = {
     try{
         const { id } = req.params;
 
-        const collaborator = await Collaborators.findByIdAndUpdate(id, req.body, { new: true });
-        const company = await Companies.findByIdAndUpdate(collaborator.company, { $push: { collaborators: collaborator._id } }, { new: true });
+        if(!id) return res.json({
+            success: false,
+            error: 'ID is required'
+        });
+
+        const collaborator = await Collaborators.findByIdAndUpdate(id, req.body, { new: false });
+        // remove collaborator id from company collaborators
+        const company = await Companies.findByIdAndUpdate(collaborator.company, { $pull: { collaborators: collaborator._id } }, { new: true });
+        // add collaborator id to company collaborators
+        const company2 = await Companies.findByIdAndUpdate(req.body.company, { $push: { collaborators: collaborator._id } }, { new: true });
 
         return res.json({
           success: true,
@@ -107,12 +115,12 @@ module.exports = {
         error: 'Parâmetros inválidos'
       });
 
-      const collaborator = await Collaborators.findOne({_id: id});
+      const collaborator2 = await Collaborators.findOne({_id: id});
 
       const collaborator = await Collaborators.findByIdAndUpdate(collaboratorId, {
         $push: {
           points: {
-            collaboratorName: collaborator.name,
+            collaboratorName: collaborator2.name,
             date,
             hours,
             type
