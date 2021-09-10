@@ -36,7 +36,7 @@ module.exports = {
         success: false,
         error: 'Company is required'
       });
-      
+
       
       if(req.body.cpf && await Collaborators.findOne({ cpf: req.body.cpf })) return res.json({
         success: false,
@@ -44,7 +44,7 @@ module.exports = {
       });
       
       const collaborator = await Collaborators.create(req.body);
-      const company = await Collaborators.findByIdAndUpdate(req.body.company, { $push: { collaborators: collaborator._id } }, { new: true });
+      const company = await Companies.findByIdAndUpdate(req.body.company, { $push: { collaborators: collaborator._id } }, { new: true });
 
       return res.json({
         success: true,
