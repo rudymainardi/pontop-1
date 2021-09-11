@@ -122,7 +122,7 @@ module.exports = {
         $push: {
           points: {
             collaboratorName: collaborator2.name,
-            collaboratorId: collaborator2._id,
+            collaboratorId: id,
             date,
             hours,
             type
