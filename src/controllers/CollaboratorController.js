@@ -1,6 +1,8 @@
 const Collaborators = require('../models/Collaborators');
 const Companies = require('../models/Companies');
 
+const bcrypt = require('bcrypt');
+
 module.exports = {
   read: async (req, res) => {
     try{
@@ -34,7 +36,6 @@ module.exports = {
     try{
       const { password } = req.body;
 
-
       if(req.body.company === 'none') return res.json({
         success: false,
         error: 'Company is required'
@@ -44,20 +45,15 @@ module.exports = {
         success: false,
         error: 'Password is required'
       });
-
       
       if(req.body.cpf && await Collaborators.findOne({ cpf: req.body.cpf })) return res.json({
         success: false,
         error: 'CPF já cadastrado'
       });
-      
-      
-      const hashedPassword = await bcrypt.hash(password, 10);
 
-      const collaborator = await Collaborators.create({
-        ...req.body,
-        password: hashedPassword
-      });
+      req.body.password = await bcrypt.hash(password, 10);
+
+      const collaborator = await Collaborators.create(req.body);
       const company = await Companies.findByIdAndUpdate(req.body.company, { $push: { collaborators: collaborator._id } }, { new: true });
 
       return res.json({
@@ -65,6 +61,7 @@ module.exports = {
         collaborator
       });
     }catch(err){
+      console.log(err)
         res.json({
             success: false,
             error: err
@@ -83,9 +80,7 @@ module.exports = {
         });
 
         const collaborator = await Collaborators.findByIdAndUpdate(id, req.body, { new: false });
-        // remove collaborator id from company collaborators
         const company = await Companies.findByIdAndUpdate(collaborator.company, { $pull: { collaborators: collaborator._id } }, { new: true });
-        // add collaborator id to company collaborators
         const company2 = await Companies.findByIdAndUpdate(req.body.company, { $push: { collaborators: collaborator._id } }, { new: true });
 
         return res.json({
