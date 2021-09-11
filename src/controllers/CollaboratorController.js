@@ -32,9 +32,17 @@ module.exports = {
 
   create: async (req, res) => {
     try{
+      const { password } = req.body;
+
+
       if(req.body.company === 'none') return res.json({
         success: false,
         error: 'Company is required'
+      });
+
+      if(!password) return res.json({
+        success: false,
+        error: 'Password is required'
       });
 
       
@@ -43,7 +51,13 @@ module.exports = {
         error: 'CPF já cadastrado'
       });
       
-      const collaborator = await Collaborators.create(req.body);
+      
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const collaborator = await Collaborators.create({
+        ...req.body,
+        password: hashedPassword
+      });
       const company = await Companies.findByIdAndUpdate(req.body.company, { $push: { collaborators: collaborator._id } }, { new: true });
 
       return res.json({
