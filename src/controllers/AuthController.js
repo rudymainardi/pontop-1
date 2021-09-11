@@ -65,6 +65,46 @@ module.exports = {
     };
   },
 
+  async changePassword(req, res){
+
+    try{
+      const { cpf, password, newPassword } = req.body;
+      const collaborator = await Collaborators.findOne({ cpf }).select('+password');
+
+      if(!collaborator || !password){
+        return res.status(401).send({
+          success: false,
+          error: "Collaborator/Password invalid",
+        });
+      };
+
+      if(!await bcrypt.compare(password, collaborator.password)){
+        return res.status(401).send({
+          success: false,
+          error: "Collaborator/Password invalid",
+        });
+      };
+
+      const hash = await bcrypt.hash(newPassword, 10);
+      const collaborator = await Collaborators.findOneAndUpdate({ cpf }, { password: hash });
+
+      return res.send({
+        success: true,
+        message: "Password changed",
+        collaborator,
+        token: jwt.sign({ id: collaborator._id }, jwtSecret, { expiresIn: '1d' }),
+      });
+
+    } catch (error) {
+      console.log(error)
+      return res.json({
+        success: false,
+        error,
+      });
+    };
+
+  },
+
   async me (req, res) {
     const { userId } = req;
 
