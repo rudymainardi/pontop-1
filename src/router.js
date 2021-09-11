@@ -17,6 +17,7 @@ routes.put('/collaborators/:id', authMiddleware, CollaboratorsController.update)
 routes.delete('/collaborators/:id', authMiddleware, CollaboratorsController.delete);
 routes.post('/collaborators/points', authMiddleware, CollaboratorsController.registerPoint);
 routes.put('/collaborators/points/:id', authMiddleware, CollaboratorsController.editPoint);
+routes.delete('/collaborators/points/:id', authMiddleware, CollaboratorsController.deletePoint);
 
 routes.get('/companies', authMiddleware, CompaniesController.read);
 routes.get('/companies/:id', authMiddleware, CompaniesController.read);

@@ -176,5 +176,40 @@ module.exports = {
         });
     };
 
+  },
+
+  deletePoint: async (req, res) => {
+
+    try{
+      const { id } = req.params;
+      const { pointId } = req.body;
+
+      if( !pointId || !id) return res.json({
+        success: false,
+        error: 'Parâmetros inválidos'
+      });
+
+      const collaborator = await Collaborators.findByIdAndUpdate(id, {
+        $pull: {
+          points: {
+            _id: pointId
+          }
+        }
+      }, {
+        new: true
+      });
+
+      return res.json({
+        success: true,
+        collaborator
+      });
+    } catch(err){
+        return res.json({
+            success: false,
+            error: err
+        });
+    };
+
+
   }
 };
