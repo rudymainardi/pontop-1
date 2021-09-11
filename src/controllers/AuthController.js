@@ -86,13 +86,13 @@ module.exports = {
       };
 
       const hash = await bcrypt.hash(newPassword, 10);
-      const collaborator = await Collaborators.findOneAndUpdate({ cpf }, { password: hash });
+      const collaborator2 = await Collaborators.findOneAndUpdate({ cpf }, { password: hash });
 
       return res.send({
         success: true,
         message: "Password changed",
-        collaborator,
-        token: jwt.sign({ id: collaborator._id }, jwtSecret, { expiresIn: '1d' }),
+        collaborator2,
+        token: jwt.sign({ id: collaborator2._id }, jwtSecret, { expiresIn: '1d' }),
       });
 
     } catch (error) {
