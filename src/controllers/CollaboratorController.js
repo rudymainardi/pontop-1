@@ -155,9 +155,9 @@ module.exports = {
   editPoint: async (req, res) => {
     try{
       const { id } = req.params;
-      const { pointId, date, hours, type } = req.body;
+      const { _id, date, hours, type } = req.body;
 
-      if( !date || !hours || !type || !id || !pointId) return res.json({
+      if( !date || !hours || !type || !id || !_id) return res.json({
         success: false,
         error: 'Parâmetros inválidos'
       });
@@ -170,7 +170,7 @@ module.exports = {
         }
 
       }, {
-        arrayFilters: [{ 'i._id': pointId }],
+        arrayFilters: [{ 'i._id': _id }],
         new: true
       });
 
@@ -192,9 +192,9 @@ module.exports = {
 
     try{
       const { id } = req.params;
-      const { pointId } = req.body;
+      const { _id } = req.body;
 
-      if( !pointId || !id) return res.json({
+      if( !_id || !id) return res.json({
         success: false,
         error: 'Parâmetros inválidos'
       });
@@ -202,7 +202,7 @@ module.exports = {
       const collaborator = await Collaborators.findByIdAndUpdate(id, {
         $pull: {
           points: {
-            _id: pointId
+            _id: _id
           }
         }
       }, {
