@@ -39,6 +39,13 @@ module.exports = {
         error: 'CNPJ já cadastrado'
       });
       
+      const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/;
+
+      if(!cnpjRegex.test(req.body.cnpj)) return res.json({
+        success: false,
+        error: 'CNPJ inválido'
+      });
+      
       const company = await Companies.create(req.body);
 
       return res.json({

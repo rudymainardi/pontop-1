@@ -45,6 +45,13 @@ module.exports = {
         success: false,
         error: 'Password is required'
       });
+
+      const cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
+
+      if(!cpfRegex.test(req.body.cpf)) return res.json({
+        success: false,
+        error: 'CPF is invalid'
+      });
       
       if(req.body.cpf && await Collaborators.findOne({ cpf: req.body.cpf })) return res.json({
         success: false,
