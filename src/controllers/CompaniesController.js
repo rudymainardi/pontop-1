@@ -1,4 +1,5 @@
 const Companies = require('../models/Companies');
+const verifyCnpj = require('../utils/verifyCnpj');
 
 module.exports = {
   read: async (req, res) => {
@@ -38,10 +39,9 @@ module.exports = {
         success: false,
         error: 'CNPJ já cadastrado'
       });
-      
-      const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/;
 
-      if(!cnpjRegex.test(req.body.cnpj)) return res.json({
+
+      if(verifyCnpj(req.body.cnpj)) return res.json({
         success: false,
         error: 'CNPJ inválido'
       });
@@ -64,6 +64,11 @@ module.exports = {
   update: async (req, res) => {
     try{
         const { id } = req.params;
+
+        if(verifyCnpj(req.body.cnpj)) return res.json({
+          success: false,
+          error: 'CNPJ inválido'
+        });
 
         const company = await Companies.findByIdAndUpdate(id, req.body, { new: true });
 
