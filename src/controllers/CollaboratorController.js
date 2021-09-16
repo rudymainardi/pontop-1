@@ -1,5 +1,6 @@
 const Collaborators = require('../models/Collaborators');
 const Companies = require('../models/Companies');
+const verifyCpf = require('../utils/verifyCpf');
 
 const bcrypt = require('bcrypt');
 
@@ -46,9 +47,7 @@ module.exports = {
         error: 'Password is required'
       });
 
-      const cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
-
-      if(!cpfRegex.test(req.body.cpf)) return res.json({
+      if(verifyCpf(req.body.cpf)) return res.json({
         success: false,
         error: 'CPF is invalid'
       });
@@ -84,6 +83,11 @@ module.exports = {
         if(!id) return res.json({
             success: false,
             error: 'ID is required'
+        });
+
+        if(verifyCpf(req.body.cpf)) return res.json({
+          success: false,
+          error: 'CPF is invalid'
         });
 
         const collaborator = await Collaborators.findByIdAndUpdate(id, req.body, { new: false });
