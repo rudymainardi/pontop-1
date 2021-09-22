@@ -27,9 +27,10 @@ routes.delete('/companies/:id', authMiddleware, CompaniesController.delete);
 routes.post('/companies/points', authMiddleware, CompaniesController.registerPoint);
 
 /* Auth routes */
-routes.post('/auth', AuthController.authenticate); // Authenticate a collaborator
-routes.get('/me', authMiddleware, AuthController.me); // Authenticate a collaborator
-routes.post('/change-pass', authMiddleware, AuthController.changePassword); // Authenticate a collaborator
-routes.post('/forgot-password', AuthController.forgotPassword); // Authenticate a collaborator
+routes.post('/auth', AuthController.authenticate);
+routes.get('/me', authMiddleware, AuthController.me);
+routes.post('/change-pass', authMiddleware, AuthController.changePassword);
+routes.post('/forgot-password', AuthController.forgotPassword);
+routes.post('/reset-password', AuthController.resetPassword);
 
 module.exports = routes;

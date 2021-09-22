@@ -144,7 +144,7 @@ module.exports = {
         error: 'Email não cadastrado'
       });
 
-      const token = crypto.randomBytes(20).toString('hex');
+      const token = crypto.randomBytes(5).toString('hex');
       console.log(token);
 
       const now = new Date();
@@ -190,4 +190,54 @@ module.exports = {
         });
     };
   },
+
+  resetPassword: async (req, res) => {
+    try{
+      const { email, token, password } = req.body;
+
+      if(!email || !token || !password) return res.json({
+        success: false,
+        error: 'Email, token and password are required'
+      });
+
+      const collaborator = await Collaborators.findOne({ email }).select('+passwordResetToken passwordResetExpires');
+
+      if(!collaborator) return res.json({
+        success: false,
+        error: 'User not found'
+      });
+
+      if(token !== collaborator.passwordResetToken) return res.json({
+        success: false,
+        error: 'Token invalid'
+      });
+
+      const now = new Date();
+
+      if(now > collaborator.passwordResetExpires) return res.json({
+        success: false,
+        error: 'Token expired, generate a new one'
+      });
+
+      const hash = await bcrypt.hash(password, 10);
+
+      await Collaborators.findOneAndUpdate({ email }, {
+        password: hash,
+        passwordResetToken: undefined,
+        passwordResetExpires: undefined
+      });
+
+      return res.json({
+        success: true,
+        message: 'Password changed'
+      });
+
+    }catch(err){
+      console.log(err);
+        return res.json({
+            success: false,
+            error: err
+        });
+    };
+  }
 };
