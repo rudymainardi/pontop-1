@@ -1,6 +1,8 @@
 const Collaborators = require('../models/Collaborators');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const mailer = require('../modules/mailer');
 
 require('dotenv').config();
 
@@ -124,5 +126,68 @@ module.exports = {
         message: err
       });
     };
-  }
+  },
+
+  forgotPassword: async (req, res) => {
+    try{
+      const { email } = req.body;
+
+      if(!email) return res.json({
+        success: false,
+        error: 'Email is required'
+      });
+
+      const collaborator = await Collaborators.findOne({ email });
+
+      if(!collaborator) return res.json({
+        success: false,
+        error: 'Email não cadastrado'
+      });
+
+      const token = crypto.randomBytes(20).toString('hex');
+      console.log(token);
+
+      const now = new Date();
+      now.setHours(now.getHours() + 1);
+
+      await Collaborators.findByIdAndUpdate(collaborator._id, {
+        '$set': {
+          passwordResetToken: token,
+          passwordResetExpires: now
+        }
+      });
+
+      mailer.verify(function(error, success) {
+        if (error) {
+             console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq', error);
+        } else {
+             console.log('Server is ready to take our messages', success);
+        }
+      });
+
+      return mailer.sendMail({
+        to: email,
+        from: 'francasantos323@gmail.com',
+        template: 'auth/forgot_password',
+        context: { token }
+      }, (err) => {
+        if(err) return res.json({
+          success: false,
+          error: 'Error sending email'
+        });
+
+        return res.json({
+          success: true,
+          message: 'Email sent'
+        });
+      });
+
+    }catch(err){
+      console.log(err);
+        return res.json({
+            success: false,
+            error: err
+        });
+    };
+  },
 };

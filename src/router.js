@@ -30,5 +30,6 @@ routes.post('/companies/points', authMiddleware, CompaniesController.registerPoi
 routes.post('/auth', AuthController.authenticate); // Authenticate a collaborator
 routes.get('/me', authMiddleware, AuthController.me); // Authenticate a collaborator
 routes.post('/change-pass', authMiddleware, AuthController.changePassword); // Authenticate a collaborator
+routes.post('/forgot-password', AuthController.forgotPassword); // Authenticate a collaborator
 
 module.exports = routes;

@@ -229,7 +229,5 @@ module.exports = {
             error: err
         });
     };
-
-
-  }
+  },
 };
