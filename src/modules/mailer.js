@@ -32,7 +32,7 @@ transport.use(
   })
 );
 
-mailer.verify(function(error, success) {
+transport.verify(function(error, success) {
   if (error) {
        console.log(error);
   } else {
