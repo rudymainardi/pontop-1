@@ -19,8 +19,6 @@ const transport = nodemailer.createTransport({
   auth: { user, pass },
 });
 
-console.log(`Mailer: ${service}://${user}:${pass}@${host}:${port}`);
-
 transport.use(
   'compile',
   hbs({
@@ -33,5 +31,13 @@ transport.use(
     extName: '.html',
   })
 );
+
+mailer.verify(function(error, success) {
+  if (error) {
+       console.log(error);
+  } else {
+       console.log('Server is ready to take our messages', success);
+  };
+});
 
 module.exports = transport;

@@ -145,7 +145,6 @@ module.exports = {
       });
 
       const token = crypto.randomBytes(5).toString('hex');
-      console.log(token);
 
       const now = new Date();
       now.setHours(now.getHours() + 1);
@@ -154,14 +153,6 @@ module.exports = {
         '$set': {
           passwordResetToken: token,
           passwordResetExpires: now
-        }
-      });
-
-      mailer.verify(function(error, success) {
-        if (error) {
-             console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq', error);
-        } else {
-             console.log('Server is ready to take our messages', success);
         }
       });
 
@@ -221,15 +212,16 @@ module.exports = {
 
       const hash = await bcrypt.hash(password, 10);
 
-      await Collaborators.findOneAndUpdate({ email }, {
+      const collaboratorUpdated = await Collaborators.findOneAndUpdate({ email }, {
         password: hash,
         passwordResetToken: undefined,
         passwordResetExpires: undefined
-      });
+      }, { new: true });
 
       return res.json({
         success: true,
-        message: 'Password changed'
+        message: 'Password changed',
+        collaboratorUpdated
       });
 
     }catch(err){
